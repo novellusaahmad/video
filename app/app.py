@@ -40,7 +40,7 @@ from typing import List, Tuple
 
 import streamlit as st
 from PIL import Image, ImageDraw, ImageFont
-from moviepy import ImageClip, AudioFileClip, concatenate_videoclips
+from moviepy.editor import ImageClip, AudioFileClip, concatenate_videoclips
 from slugify import slugify
 
 # Optional imports
