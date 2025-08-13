@@ -1,5 +1,5 @@
 streamlit
-moviepy
+moviepy<2
 Pillow
 numpy
 pydub

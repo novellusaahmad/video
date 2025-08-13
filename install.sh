@@ -17,7 +17,10 @@ source .venv/bin/activate
 pip install --upgrade pip
 pip install -r requirements.txt
 
-# Ensure moviepy is installed even if requirements change
-pip install moviepy
+# Pin moviepy to <2.0 so ImageClip still exposes set_duration
+pip install "moviepy<2"
+
+# Provide piper binary if users want the Piper TTS engine
+pip install piper-tts
 
 echo "Installation complete. Activate the environment with 'source .venv/bin/activate'."
