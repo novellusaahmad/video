@@ -1,0 +1,8 @@
+streamlit
+moviepy
+Pillow
+numpy
+pydub
+python-slugify
+requests
+pyttsx3

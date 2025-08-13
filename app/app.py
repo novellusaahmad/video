@@ -138,31 +138,37 @@ LLM_PROMPT = (
     "Age-appropriate (3–8), friendly tone, simple words, each scene 1–3 sentences, and a gentle arc."
 )
 
+
 def generate_story_ollama(title: str, age: int, theme: str, moral: str, minutes: int, num_scenes: int, model: str) -> Tuple[str, List[Scene]]:
     if not requests:
         raise RuntimeError("'requests' not installed for Ollama API.")
     payload = {
         "model": model,
         "prompt": (
-            f"{LLM_PROMPT}
-Title: {title}
-Age: {age}
-Theme: {theme}
-Moral: {moral}
-"
-            f"Scenes: {num_scenes}
-Duration minutes: {minutes}
-"
+            f"{LLM_PROMPT}\n"
+            f"Title: {title}\n"
+            f"Age: {age}\n"
+            f"Theme: {theme}\n"
+            f"Moral: {moral}\n"
+            f"Scenes: {num_scenes}\n"
+            f"Duration minutes: {minutes}\n"
             "Return only JSON."
         ),
-        "stream": False
+        "stream": False,
     }
     r = requests.post(f"{OLLAMA_API}/api/generate", json=payload, timeout=180)
     r.raise_for_status()
     text = r.json().get("response", "{}")
     try:
         data = json.loads(text)
-        scenes = [Scene(s.get("text", ""), s.get("prompt", "friendly illustration of the scene"), max(3.5, min(10.0, (minutes*60)/num_scenes))) for s in data.get("scenes", [])]
+        scenes = [
+            Scene(
+                s.get("text", ""),
+                s.get("prompt", "friendly illustration of the scene"),
+                max(3.5, min(10.0, (minutes * 60) / num_scenes)),
+            )
+            for s in data.get("scenes", [])
+        ]
         if not scenes:
             raise ValueError("No scenes in LLM output")
         return data.get("title", title), scenes[:num_scenes]
